@@ -1,0 +1,39 @@
+Lab preflight - 2026-10-28T18:32:40Z - region us-east-1
+-----------------------------------------------
+Identity: arn:aws:sts::018206537112:assumed-role/voclabs/user3669464=chhibaachaima@gmail.com
+
+== Core services (list calls) ==
+[ALLOWED] ECS list clusters
+[ALLOWED] ECR describe repositories
+[ALLOWED] RDS describe instances
+[ALLOWED] ELBv2 describe load balancers
+[ALLOWED] EC2 describe VPCs
+[ALLOWED] Secrets Manager list
+[ALLOWED] CloudWatch describe alarms
+[ALLOWED] SNS list topics
+[ALLOWED] CloudTrail describe trails
+[ALLOWED] WAFv2 list web ACLs (regional)
+[ALLOWED] WAFv2 list web ACLs (CLOUDFRONT, us-east-1)
+[BLOCKED] CloudFront list distributions  ->  
+[ALLOWED] ACM list certificates (expected blocked)
+
+== IAM roles ==
+[ALLOWED] IAM get LabRole
+[ALLOWED] IAM list server certificates
+
+== Write test: IAM server certificate upload (fallback for HTTPS on the ALB) ==
+[ALLOWED] IAM upload-server-certificate
+
+== Default VPC / quotas hints ==
+[ALLOWED] EC2 describe availability zones
+[ALLOWED] EC2 describe NAT gateways
+
+-----------------------------------------------
+How to read this:
+ - ACM BLOCKED is expected (that is why we use CloudFront's default certificate).
+ - CloudFront ALLOWED + WAF CLOUDFRONT ALLOWED  -> Option A works (recommended).
+ - CloudFront BLOCKED but IAM upload ALLOWED     -> Option B (HTTPS listener on the ALB).
+ - Both blocked                                  -> Option C (nginx TLS in the container).
+ - ECS BLOCKED                                   -> fall back to EC2 + Docker for both stages.
+
+Saved to ./evidence/00-baseline/lab-preflight.txt

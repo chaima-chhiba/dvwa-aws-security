@@ -1,0 +1,26 @@
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+.terraform.lock.hcl.bak
+
+# Secrets - never commit
+.env
+*.pem
+*.key
+*.pub
+credentials
+.aws/
+
+# Session cookie used by attacks.sh
+.session
+
+# Large captures (keep screenshots, ignore raw pcaps)
+*.pcap
+*.pcapng
+
+# Editor / OS
+.DS_Store
+.vscode/

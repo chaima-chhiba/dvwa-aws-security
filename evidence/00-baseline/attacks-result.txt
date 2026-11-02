@@ -1,0 +1,12 @@
+attacks.sh | stage=00-baseline | target=http://13.217.38.98 | 2026-11-02T10:21:06Z
+-----------------------------------------------------------------------------
+0 Reachability                     OK                 HTTP 200 from http://13.217.38.98/login.php
+1 Login (admin/password)           OK                 logged in, security=low
+2 SQL injection (1' OR '1'='1)     ATTACK SUCCEEDED   HTTP 200, 5 user rows dumped
+3 Reflected XSS (<script>)         ATTACK SUCCEEDED   HTTP 200, payload reflected unescaped
+4 Direct DB access (3306)          ATTACK SUCCEEDED   connected from the internet: dvwa@102.159.198.213 10.11.19-MariaDB
+5 Plain HTTP request               SKIPPED            set HTTP_URL=http://<host> (only meaningful from layer 2)
+6 Secret in task definition        ATTACK SUCCEEDED   DB_PASSWORD in plaintext: Password123
+-----------------------------------------------------------------------------
+Saved to /home/chaima/dvwa-aws-security/evidence/00-baseline/attacks-result.txt
+Manual proof still needed: Wireshark capture of the login (cleartext on HTTP, TLS only from layer 2).

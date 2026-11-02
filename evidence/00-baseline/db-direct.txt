@@ -1,0 +1,2 @@
+user()	version()
+dvwa@102.159.198.213	10.11.19-MariaDB

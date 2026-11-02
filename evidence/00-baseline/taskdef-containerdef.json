@@ -1,0 +1,46 @@
+{
+    "name": "dvwa",
+    "image": "018206537112.dkr.ecr.us-east-1.amazonaws.com/dvwa:latest",
+    "cpu": 0,
+    "portMappings": [
+        {
+            "containerPort": 80,
+            "hostPort": 80,
+            "protocol": "tcp"
+        }
+    ],
+    "essential": true,
+    "environment": [
+        {
+            "name": "DB_SERVER",
+            "value": "dvwa-baseline-db.cvsuvfvj9zg1.us-east-1.rds.amazonaws.com"
+        },
+        {
+            "name": "DB_PORT",
+            "value": "3306"
+        },
+        {
+            "name": "DB_DATABASE",
+            "value": "dvwa"
+        },
+        {
+            "name": "DB_USER",
+            "value": "dvwa"
+        },
+        {
+            "name": "DB_PASSWORD",
+            "value": "Password123"
+        }
+    ],
+    "mountPoints": [],
+    "volumesFrom": [],
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-group": "/ecs/dvwa-baseline",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "dvwa"
+        }
+    },
+    "systemControls": []
+}

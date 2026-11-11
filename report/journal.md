@@ -29,3 +29,9 @@
 - Saved 13-https-listener-details.png and 14-iam-certificate.png. Console confirms imported IAM certificate attached as default to HTTPS:443, forwarding to the app target group. Certificate expires December 11, 2026 at 22:04 (UTC+01:00); expiry warning is consistent with the 30-day lab certificate. Full TLS security policy screenshot still pending.
 
 - Final console evidence saved: evidence/02-https/15-tls-security-policy.png confirms ELBSecurityPolicy-TLS13-1-2-2021-06; mTLS is off. Layer 2 deployment, HTTP redirect, HTTPS response, negotiated TLS 1.3, IAM certificate attachment, and listener policy are documented. Optional packet capture remains uncollected. Limitations: self-signed certificate requires explicit trust; ALB-to-app remains HTTP; application vulnerabilities remain. No claim of end-to-end encryption.
+
+## 2026-11-11 - Layer 3 preparation
+- Layer 2 committed and pushed as 5487b4c on layer2; created layer3 branch.
+- Added regional WAF managed common and SQL injection rule groups, metrics, sampling, and ALB association. Full log delivery remains for Layer 5.
+- Layer 3 explicitly reuses terraform/layer2/terraform.tfstate via a local backend; no state copy. After Layer 3 apply, use Layer 3 for management and teardown. Deployment and filtering results remain unverified.
+- Layer 3 initialization and terraform validate passed with pinned providers; workspace is default. AWS plan and deployment pending.

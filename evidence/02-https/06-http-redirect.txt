@@ -1,0 +1,8 @@
+HTTP/1.1 301 Moved Permanently
+Server: awselb/2.0
+Date: Wed, 11 Nov 2026 21:14:38 GMT
+Content-Type: text/html
+Content-Length: 134
+Connection: keep-alive
+Location: https://dvwa-layer1-alb-1453017428.us-east-1.elb.amazonaws.com:443/login.php
+

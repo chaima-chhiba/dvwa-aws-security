@@ -1,0 +1,6 @@
+Observed in user-provided screenshot on 2026-11-11:
+HTTP request: HTTP/1.1 301 Moved Permanently.
+Location points to the ALB HTTPS endpoint on port 443, preserving /login.php.
+HTTPS request with curl -k: HTTP/2 200.
+This proves HTTPS connectivity with certificate verification bypassed, not certificate trust.
+Original screenshot not copied into repository because it contains session cookies. Set-Cookie headers removed from saved response files.

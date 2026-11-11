@@ -1,0 +1,12 @@
+Connecting to 98.89.117.215
+depth=0 O=TEK-UP DVWA lab, CN=dvwa-layer1-alb-1453017428.us-east-1.elb.amazonaws.com
+verify error:num=18:self-signed certificate
+CONNECTION ESTABLISHED
+Protocol version: TLSv1.3
+Ciphersuite: TLS_AES_128_GCM_SHA256
+Peer certificate: O=TEK-UP DVWA lab, CN=dvwa-layer1-alb-1453017428.us-east-1.elb.amazonaws.com
+Hash used: SHA256
+Signature type: rsa_pss_rsae_sha256
+Verification error: self-signed certificate
+Peer Temp Key: X25519, 253 bits
+DONE

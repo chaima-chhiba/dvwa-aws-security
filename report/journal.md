@@ -82,3 +82,15 @@
 - Secret resource policy readback confirms Allow for arn role/LabRole, action secretsmanager:GetSecretValue, scoped to the database secret ARN. Saved evidence/04-secrets/13-resource-policy-readback.png; JSON captured as 12-secret-resource-policy.json. This is a scoped grant, not proof that only LabRole can access the secret or that LabRole has least privilege overall. Explicit ALB target-health evidence remains pending.
 
 - Final Layer 4 target-group screenshot: one total target, one healthy, zero unhealthy/initial/draining. Saved evidence/04-secrets/14-target-healthy.png. Backend protocol HTTP:80 remains visible and documented as a TLS limitation. Layer 4 evidence collected: apply, ECS steady state/revision 2, sanitized credential reference check, user-confirmed fresh login, secret metadata, scoped resource policy, target health. This does not erase historical plaintext task revisions/state or remove credentials from runtime environment.
+
+## 2026-11-11 - Layer 5 preflight
+- CloudTrail describe-trails with shadow trails in us-east-1 returned an empty list for the lab session. Saved evidence/05-logging/02-existing-trails-readback.png; command output saved as 01-existing-trails.json. This does not imply CloudTrail Event history is unavailable. Logging configuration not yet prepared or applied.
+
+- Saved evidence/05-logging/04-labrole-trust-policy.png. Visible LabRole trust statement includes multiple AWS service principals; screenshot ends before the full policy is visible. Presence/absence of vpc-flow-logs.amazonaws.com is not yet determined. Full JSON was saved by the user command as 03-labrole-trust-policy.json.
+
+- Full-file trust-policy check returned no explicit vpc-flow-logs.amazonaws.com principal. Saved evidence/05-logging/06-flow-logs-trust-check.png. Decision: prepare VPC Flow Logs delivery to S3 rather than modifying LabRole trust for CloudWatch delivery. S3 delivery permissions/configuration remain unverified; existing VPC flow logs must be checked before creating resources.
+
+- VPC-filtered describe-flow-logs returned an empty list per user screenshot; saved evidence/05-logging/08-existing-flow-logs-readback.png. No VPC-level flow log returned. Layer 5 preparation will add logging without changing application deployment.
+
+- Prepared Layer 5 on layer5 branch: WAF logs to CloudWatch with Cookie/Authorization/query redaction; VPC Flow Logs and regional CloudTrail to a private encrypted S3 archive; blocked-request alarm and SNS email subscription. Existing application configuration retained. Alert recipient supplied by user will be a sensitive runtime input, not committed.
+- Initialized against the same Layer 2 state; default workspace; terraform validate passed. Expected 14 resource additions, no changes/destruction, pending real AWS plan. Delivery permissions, alarm dimensions, subscription confirmation and actual log/alert delivery remain unverified. Lab log archive is force-deleted on teardown; export needed evidence first.

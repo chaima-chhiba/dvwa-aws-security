@@ -1,0 +1,18 @@
+{
+    "Services": [
+        {
+            "Status": "ACTIVE",
+            "Desired": 1,
+            "Running": 1,
+            "Pending": 0,
+            "TaskDefinition": "arn:aws:ecs:us-east-1:018206537112:task-definition/dvwa-layer1-task:2",
+            "RecentEvents": [
+                "(service dvwa-layer1-svc) has reached a steady state.",
+                "(service dvwa-layer1-svc) (deployment ecs-svc/6736616265871995263) deployment completed.",
+                "(service dvwa-layer1-svc) registered 1 targets in (target-group arn:aws:elasticloadbalancing:us-east-1:018206537112:targetgroup/dvwa-layer1-tg/1f211890219f07a0)",
+                "(service dvwa-layer1-svc) has started 1 tasks: (task 8c725f5a358244c69c56615db8b61eba)."
+            ]
+        }
+    ],
+    "Failures": []
+}

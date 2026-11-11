@@ -60,3 +60,25 @@
 - Created layer4 branch. Prepared secret/version/resource policy restricted to existing LabRole, JSON-key ECS secret injection, platform 1.4.0, and shared local state.
 - Removed password default in Layer 4 and marked private password input sensitive. Existing database password must be supplied unchanged; no rotation intended.
 - Local initialization and Terraform validation passed. AWS plan, permissions, replacement deployment, and runtime retrieval remain unverified. ECS service replacement will interrupt availability; secrets/state/runtime environment limitations documented in terraform/layer4/README.md.
+
+- User Layer 4 plan shows 5 add, 1 change, 2 destroy. ECS service/task definition replacements and Secrets Manager additions expected; aws_db_instance.dvwa in-place update is unexpected. Apply paused pending sanitized DB diff review. Evidence: evidence/04-secrets/01-plan-unexpected-db-update.png. Password mismatch is a possibility, not a confirmed diagnosis.
+
+- Sanitized DB diff identifies password as the sole visible changed attribute. Saved evidence/04-secrets/02-db-password-diff.png. User instructed to reuse the existing state-managed password locally without printing it, then re-plan. No apply performed; no database rotation intended.
+
+- Revised user plan after locally reusing the state-managed DB password: 5 add, 0 change, 2 destroy. Only ECS service/requested replacement, task definition replacement, and secret/policy/version additions listed; database update resolved. Saved evidence/04-secrets/03-reviewed-plan.png. Apply and runtime retrieval remain pending.
+
+- User screenshot confirms Layer 4 apply complete: 5 added, 0 changed, 2 destroyed. Saved evidence/04-secrets/04-apply-complete.png. Service health, runtime secret retrieval, sanitized task-definition references, and database-dependent application check remain pending.
+
+- ECS service readback shows ACTIVE, desired/running 1, pending 0, Failures empty, task definition revision 2. Events confirm deployment completed and steady state. Saved evidence/04-secrets/06-service-steady-state.png and user command output 05-service-health.json. Credential-reference inspection and database-dependent functional check remain pending.
+
+- Sanitized local-state check passed for task definition revision 2: no DB_USER/DB_PASSWORD plaintext environment entries; both exact expected Secrets Manager JSON-key references present. Saved evidence/04-secrets/08-secret-reference-check.png; JSON saved as 07-secret-reference-check.json. Revision matches earlier ECS service API readback. This is local-state evidence, not DescribeTaskDefinition API proof. Database-dependent login check remains pending.
+
+- User screenshot shows DVWA home at HTTPS /index.php after certificate-warning guidance. Saved evidence/04-secrets/09-dvwa-home-https.png. Browser flags untrusted self-signed certificate as expected. Screenshot alone does not establish a fresh database-backed login versus an existing session; fresh login confirmation remains pending.
+
+- User clarified that 09-dvwa-home-https.png was captured immediately after logging in, not merely reopening an existing session. Fresh application login succeeded after Layer 4 deployment (user-confirmed functional check). Combined with revision 2 running and sanitized secret-reference check, this supports successful secret-backed database authentication. Remaining evidence: secret metadata/resource policy and explicit target-health readback; plaintext history/state/runtime-environment limitations still apply.
+
+- Saved 10-secrets-manager-list.png and 11-secret-metadata.png: secret exists in us-east-1; name/ARN match configured references; encryption key aws/secretsmanager shown; secret value not retrieved in screenshot. List shows last retrieved November 11, 2026, without identifying the caller. Remaining evidence: resource policy readback and explicit target-health check.
+
+- Secret resource policy readback confirms Allow for arn role/LabRole, action secretsmanager:GetSecretValue, scoped to the database secret ARN. Saved evidence/04-secrets/13-resource-policy-readback.png; JSON captured as 12-secret-resource-policy.json. This is a scoped grant, not proof that only LabRole can access the secret or that LabRole has least privilege overall. Explicit ALB target-health evidence remains pending.
+
+- Final Layer 4 target-group screenshot: one total target, one healthy, zero unhealthy/initial/draining. Saved evidence/04-secrets/14-target-healthy.png. Backend protocol HTTP:80 remains visible and documented as a TLS limitation. Layer 4 evidence collected: apply, ECS steady state/revision 2, sanitized credential reference check, user-confirmed fresh login, secret metadata, scoped resource policy, target health. This does not erase historical plaintext task revisions/state or remove credentials from runtime environment.

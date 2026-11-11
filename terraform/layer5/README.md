@@ -1,5 +1,27 @@
 # Layer 5: logging and monitoring
 
+## Recovery from partial apply (Object Lock read denied)
+
+The bucket was created, but aws_s3_bucket failed its automatic Object Lock read
+because of an explicit lab SCP deny. HeadBucket subsequently confirmed access.
+The generic resource is now replaced by a removed block with destroy=false,
+and all dedicated bucket controls reference the existing bucket name directly.
+No Object Lock permissions or protections are changed.
+
+Review a ONE-TIME plan with -refresh=false to avoid the denied read while the
+old bucket binding is still in state. This skips drift detection for that plan;
+do not use it routinely. The plan must say the bucket will no longer be managed
+but will not be destroyed, and must show no application/network replacements.
+Back up the shared state locally before applying the reviewed recovery plan;
+never publish that backup. After handoff, run a normal plan with refresh enabled
+to verify convergence and detect drift. No state mutation has been performed by
+editing the configuration alone.
+
+The bucket now remains after terraform destroy. Record its name for cleanup.
+For a fresh lab deployment, create an ordinary private bucket using the permitted
+S3 CreateBucket API first, pass its name through audit_bucket_name, and let the
+dedicated Terraform resources configure encryption, policy, retention and access.
+
 Adds WAF CloudWatch logging (7-day retention), VPC Flow Logs to S3, regional
 CloudTrail management-event delivery with log validation, and a CloudWatch
 BlockedRequests alarm connected to an SNS email subscription.
@@ -13,8 +35,8 @@ it is not a multi-region trail. S3 object/data events are not enabled.
 
 The private S3 archive uses public-access blocking, BucketOwnerEnforced ownership,
 AES256 encryption, TLS-only access, and source-scoped service delivery policies.
-Objects expire after 30 days. Lab-only force_destroy deletes all archived logs
-on Terraform teardown: export report evidence before destroying. This archive is
+Objects expire after 30 days. The bucket itself is managed separately after the lab
+SCP blocked the generic Terraform bucket read; see recovery below. This archive is
 not immutable or production-grade; there is no Object Lock or versioning.
 
 WAF log redaction covers Cookie, Authorization, and query strings; it does not
@@ -42,7 +64,7 @@ terraform -chdir=terraform/layer5 validate
 terraform -chdir=terraform/layer5 plan -no-color
 ```
 
-Review the actual plan. Expected: 14 additions, 0 changes, 0 destruction (plus
+Review the actual plan. Initial expected plan was 14 additions. After partial apply and handoff, review the remaining additions and state-only removal (plus
 output changes). No ECS replacement flag is needed for this layer. Stop for any
 database, task definition, service, VPC, ALB, or existing WAF rule change.
 Do not apply until the plan has been reviewed.
@@ -71,6 +93,8 @@ before the confirmed ARN appears in state.
 ## Teardown
 
 Export the required report evidence first. Review and run destroy from Layer 5
-with the same private variable inputs. This permanently deletes the lab S3 log
-archive and WAF log group. Verify successful teardown, unset both TF_VAR variables,
+with the same private variable inputs. Terraform deletes the WAF log group but
+leaves the existing S3 bucket and log objects. After evidence export, explicitly
+empty/delete ONLY that lab bucket and verify cleanup. Unset both TF_VAR variables,
 then End Lab. The database secret retains its existing 7-day recovery window.
+

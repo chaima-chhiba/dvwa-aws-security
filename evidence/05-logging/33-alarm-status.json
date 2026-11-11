@@ -1,0 +1,22 @@
+[
+    {
+        "Name": "dvwa-layer1-blocked-requests",
+        "State": "OK",
+        "Reason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "Dimensions": [
+            {
+                "Name": "Region",
+                "Value": "us-east-1"
+            },
+            {
+                "Name": "Rule",
+                "Value": "ALL"
+            },
+            {
+                "Name": "WebACL",
+                "Value": "dvwa-web-acl"
+            }
+        ],
+        "ActionsEnabled": true
+    }
+]

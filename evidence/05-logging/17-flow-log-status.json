@@ -1,0 +1,9 @@
+[
+    {
+        "ID": "fl-0a86927f7660fb9e5",
+        "Status": "ACTIVE",
+        "DeliveryStatus": "SUCCESS",
+        "DeliveryError": null,
+        "Destination": "arn:aws:s3:::dvwa-audit-20261111221542314000000001/flowlogs/"
+    }
+]

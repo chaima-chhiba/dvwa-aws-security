@@ -1,0 +1,26 @@
+{
+    "LoggingConfiguration": {
+        "ResourceArn": "arn:aws:wafv2:us-east-1:018206537112:regional/webacl/dvwa-layer1-waf/c4ec632f-fc00-4d7a-8d3e-1f505c2e25b2",
+        "LogDestinationConfigs": [
+            "arn:aws:logs:us-east-1:018206537112:log-group:aws-waf-logs-dvwa-layer1"
+        ],
+        "RedactedFields": [
+            {
+                "QueryString": {}
+            },
+            {
+                "SingleHeader": {
+                    "Name": "authorization"
+                }
+            },
+            {
+                "SingleHeader": {
+                    "Name": "cookie"
+                }
+            }
+        ],
+        "ManagedByFirewallManager": false,
+        "LogType": "WAF_LOGS",
+        "LogScope": "CUSTOMER"
+    }
+}

@@ -1,0 +1,12 @@
+[
+    {
+        "Prefix":  "flowlogs/",
+        "NonEmptyObjects":  9,
+        "ExampleKey":  "flowlogs/AWSLogs/018206537112/vpcflowlogs/us-east-1/2026/11/11/018206537112_vpcflowlogs_us-east-1_fl-0a86927f7660fb9e5_20261111T2220Z_45680cf8.log.gz"
+    },
+    {
+        "Prefix":  "cloudtrail/",
+        "NonEmptyObjects":  10,
+        "ExampleKey":  "cloudtrail/AWSLogs/018206537112/CloudTrail/us-east-1/2026/11/11/018206537112_CloudTrail_us-east-1_20261111T2225Z_Ub8c7O44hf0Tq5nB.json.gz"
+    }
+]

@@ -19,16 +19,29 @@ variable "alert_email" {
   }
 }
 
-# Short-lived lab archive. Destroying this bucket also deletes its logs.
-# Export the evidence needed for the report before teardown.
-resource "aws_s3_bucket" "audit" {
-  bucket_prefix = "dvwa-audit-"
-  force_destroy = true
-  tags          = { Stage = "layer5" }
+# Keep the bucket created by the partial apply. The generic bucket resource reads
+# Object Lock configuration, which the lab SCP denies even when Object Lock is off.
+# Dedicated resources below manage only the required, permitted bucket controls.
+variable "audit_bucket_name" {
+  type        = string
+  default     = "dvwa-audit-20261111221542314000000001"
+  description = "Existing lab log bucket; created/removed separately from Terraform."
+}
+
+locals {
+  audit_bucket_arn = "arn:aws:s3:::${var.audit_bucket_name}"
+}
+
+# Reviewable ownership handoff, NOT a bucket deletion. Requires Terraform >= 1.7.
+removed {
+  from = aws_s3_bucket.audit
+  lifecycle {
+    destroy = false
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "audit" {
-  bucket                  = aws_s3_bucket.audit.id
+  bucket                  = var.audit_bucket_name
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -36,14 +49,14 @@ resource "aws_s3_bucket_public_access_block" "audit" {
 }
 
 resource "aws_s3_bucket_ownership_controls" "audit" {
-  bucket = aws_s3_bucket.audit.id
+  bucket = var.audit_bucket_name
   rule {
     object_ownership = "BucketOwnerEnforced"
   }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "audit" {
-  bucket = aws_s3_bucket.audit.id
+  bucket = var.audit_bucket_name
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -52,7 +65,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "audit" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "audit" {
-  bucket = aws_s3_bucket.audit.id
+  bucket = var.audit_bucket_name
   rule {
     id     = "lab-log-retention"
     status = "Enabled"
@@ -67,7 +80,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "audit" {
 }
 
 resource "aws_s3_bucket_policy" "audit" {
-  bucket = aws_s3_bucket.audit.id
+  bucket = var.audit_bucket_name
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -76,7 +89,7 @@ resource "aws_s3_bucket_policy" "audit" {
         Effect    = "Deny"
         Principal = "*"
         Action    = "s3:*"
-        Resource  = [aws_s3_bucket.audit.arn, "${aws_s3_bucket.audit.arn}/*"]
+        Resource  = [local.audit_bucket_arn, "${local.audit_bucket_arn}/*"]
         Condition = { Bool = { "aws:SecureTransport" = "false" } }
       },
       {
@@ -84,7 +97,7 @@ resource "aws_s3_bucket_policy" "audit" {
         Effect    = "Allow"
         Principal = { Service = "cloudtrail.amazonaws.com" }
         Action    = "s3:GetBucketAcl"
-        Resource  = aws_s3_bucket.audit.arn
+        Resource  = local.audit_bucket_arn
         Condition = { StringEquals = { "aws:SourceArn" = local.trail_arn } }
       },
       {
@@ -92,7 +105,7 @@ resource "aws_s3_bucket_policy" "audit" {
         Effect    = "Allow"
         Principal = { Service = "cloudtrail.amazonaws.com" }
         Action    = "s3:PutObject"
-        Resource  = "${aws_s3_bucket.audit.arn}/cloudtrail/AWSLogs/${local.account_id}/*"
+        Resource  = "${local.audit_bucket_arn}/cloudtrail/AWSLogs/${local.account_id}/*"
         Condition = { StringEquals = {
           "aws:SourceArn" = local.trail_arn
           "s3:x-amz-acl"  = "bucket-owner-full-control"
@@ -103,7 +116,7 @@ resource "aws_s3_bucket_policy" "audit" {
         Effect    = "Allow"
         Principal = { Service = "delivery.logs.amazonaws.com" }
         Action    = "s3:GetBucketAcl"
-        Resource  = aws_s3_bucket.audit.arn
+        Resource  = local.audit_bucket_arn
         Condition = {
           StringEquals = { "aws:SourceAccount" = local.account_id }
           ArnLike      = { "aws:SourceArn" = "arn:aws:logs:${var.region}:${local.account_id}:*" }
@@ -114,7 +127,7 @@ resource "aws_s3_bucket_policy" "audit" {
         Effect    = "Allow"
         Principal = { Service = "delivery.logs.amazonaws.com" }
         Action    = "s3:PutObject"
-        Resource  = "${aws_s3_bucket.audit.arn}/flowlogs/AWSLogs/${local.account_id}/*"
+        Resource  = "${local.audit_bucket_arn}/flowlogs/AWSLogs/${local.account_id}/*"
         Condition = {
           StringEquals = {
             "aws:SourceAccount" = local.account_id
@@ -130,7 +143,7 @@ resource "aws_s3_bucket_policy" "audit" {
 
 resource "aws_cloudtrail" "audit" {
   name                          = local.trail_name
-  s3_bucket_name                = aws_s3_bucket.audit.id
+  s3_bucket_name                = var.audit_bucket_name
   s3_key_prefix                 = "cloudtrail"
   enable_logging                = true
   enable_log_file_validation    = true
@@ -152,7 +165,7 @@ resource "aws_flow_log" "vpc" {
   vpc_id                   = aws_vpc.main.id
   traffic_type             = "ALL"
   log_destination_type     = "s3"
-  log_destination          = "${aws_s3_bucket.audit.arn}/flowlogs/"
+  log_destination          = "${local.audit_bucket_arn}/flowlogs/"
   max_aggregation_interval = 60
   tags                     = { Name = "${local.name}-flow-logs", Stage = "layer5" }
   depends_on = [
@@ -226,7 +239,8 @@ resource "aws_cloudwatch_metric_alarm" "blocked" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   treat_missing_data  = "notBreaching"
   dimensions = {
-    WebACL = aws_wafv2_web_acl.dvwa.visibility_config[0].metric_name
+    # Match the actual aggregate BlockedRequests series verified by list-metrics.
+    WebACL = aws_wafv2_web_acl.dvwa.name
     Rule   = "ALL"
     Region = var.region
   }
@@ -236,7 +250,7 @@ resource "aws_cloudwatch_metric_alarm" "blocked" {
 }
 
 output "audit_bucket_name" {
-  value = aws_s3_bucket.audit.id
+  value = var.audit_bucket_name
 }
 output "trail_arn" {
   value = aws_cloudtrail.audit.arn
@@ -253,3 +267,4 @@ output "alert_topic_arn" {
 output "blocked_alarm_name" {
   value = aws_cloudwatch_metric_alarm.blocked.alarm_name
 }
+

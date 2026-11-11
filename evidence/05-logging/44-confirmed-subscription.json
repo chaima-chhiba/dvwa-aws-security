@@ -1,0 +1,6 @@
+[
+    {
+        "Protocol": "email",
+        "SubscriptionArn": "arn:aws:sns:us-east-1:018206537112:dvwa-layer1-security-alerts:01518da3-64b5-4ee4-9e89-c0714b1e9447"
+    }
+]

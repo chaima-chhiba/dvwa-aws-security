@@ -1,0 +1,246 @@
+[
+    [
+        {
+            "Name": "ManagedRuleGroup",
+            "Value": "AWSManagedRulesCommonRuleSet"
+        },
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        }
+    ],
+    [
+        {
+            "Name": "Resource",
+            "Value": "arn:aws:elasticloadbalancing:us-east-1:018206537112:loadbalancer/app/dvwa-layer1-alb/470443b5fb464f31"
+        },
+        {
+            "Name": "ResourceType",
+            "Value": "ALB"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Device",
+            "Value": "Desktop"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        },
+        {
+            "Name": "Rule",
+            "Value": "ALL"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Country",
+            "Value": "SG"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        },
+        {
+            "Name": "Attack",
+            "Value": "NoUserAgent"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        },
+        {
+            "Name": "Rule",
+            "Value": "dvwa-common-rules"
+        }
+    ],
+    [
+        {
+            "Name": "ManagedRuleGroup",
+            "Value": "AWSManagedRulesCommonRuleSet"
+        },
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "ManagedRuleGroupRule",
+            "Value": "NoUserAgent_HEADER"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        }
+    ],
+    [
+        {
+            "Name": "Resource",
+            "Value": "arn:aws:elasticloadbalancing:us-east-1:018206537112:loadbalancer/app/dvwa-layer1-alb/470443b5fb464f31"
+        },
+        {
+            "Name": "LabelName",
+            "Value": "NoUserAgent_Header"
+        },
+        {
+            "Name": "ResourceType",
+            "Value": "ALB"
+        },
+        {
+            "Name": "LabelNamespace",
+            "Value": "awswaf:managed:aws:core-rule-set"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        },
+        {
+            "Name": "LabelName",
+            "Value": "NoUserAgent_Header"
+        },
+        {
+            "Name": "LabelNamespace",
+            "Value": "awswaf:managed:aws:core-rule-set"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        },
+        {
+            "Name": "VulnerabilityCategory",
+            "Value": "HostingProviderIPList"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        },
+        {
+            "Name": "LabelName",
+            "Value": "BadBots_Header"
+        },
+        {
+            "Name": "LabelNamespace",
+            "Value": "awswaf:managed:aws:core-rule-set"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        },
+        {
+            "Name": "Attack",
+            "Value": "BadBots"
+        }
+    ],
+    [
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "Country",
+            "Value": "US"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        }
+    ],
+    [
+        {
+            "Name": "Resource",
+            "Value": "arn:aws:elasticloadbalancing:us-east-1:018206537112:loadbalancer/app/dvwa-layer1-alb/470443b5fb464f31"
+        },
+        {
+            "Name": "LabelName",
+            "Value": "BadBots_Header"
+        },
+        {
+            "Name": "ResourceType",
+            "Value": "ALB"
+        },
+        {
+            "Name": "LabelNamespace",
+            "Value": "awswaf:managed:aws:core-rule-set"
+        }
+    ],
+    [
+        {
+            "Name": "ManagedRuleGroup",
+            "Value": "AWSManagedRulesCommonRuleSet"
+        },
+        {
+            "Name": "WebACL",
+            "Value": "dvwa-layer1-waf"
+        },
+        {
+            "Name": "ManagedRuleGroupRule",
+            "Value": "UserAgent_BadBots_HEADER"
+        },
+        {
+            "Name": "Region",
+            "Value": "us-east-1"
+        }
+    ]
+]

@@ -1,0 +1,21 @@
+=== flowlogs/ ===
+[
+    {
+        "Key": "flowlogs/AWSLogs/018206537112/",
+        "Size": 0,
+        "LastModified": "2026-11-11T22:19:54+00:00"
+    }
+]
+=== cloudtrail/ ===
+[
+    {
+        "Key": "cloudtrail/AWSLogs/018206537112/CloudTrail-Digest/",
+        "Size": 0,
+        "LastModified": "2026-11-11T22:19:54+00:00"
+    },
+    {
+        "Key": "cloudtrail/AWSLogs/018206537112/CloudTrail/",
+        "Size": 0,
+        "LastModified": "2026-11-11T22:19:54+00:00"
+    }
+]

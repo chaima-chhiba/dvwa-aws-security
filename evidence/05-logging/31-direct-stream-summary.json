@@ -1,0 +1,69 @@
+{
+  "ParsedRecords": 9,
+  "UnparsedEvents": 0,
+  "Records": [
+    {
+      "Timestamp": 1794435553602,
+      "Action": "BLOCK",
+      "TerminatingRuleId": "AWSManagedRulesCommonRuleSet",
+      "SensitiveHeaderRedactionChecks": {},
+      "QueryStringRedacted": true
+    },
+    {
+      "Timestamp": 1794435553616,
+      "Action": "BLOCK",
+      "TerminatingRuleId": "AWSManagedRulesCommonRuleSet",
+      "SensitiveHeaderRedactionChecks": {},
+      "QueryStringRedacted": true
+    },
+    {
+      "Timestamp": 1794435559882,
+      "Action": "BLOCK",
+      "TerminatingRuleId": "AWSManagedRulesCommonRuleSet",
+      "SensitiveHeaderRedactionChecks": {},
+      "QueryStringRedacted": true
+    },
+    {
+      "Timestamp": 1794435942579,
+      "Action": "ALLOW",
+      "TerminatingRuleId": "Default_Action",
+      "SensitiveHeaderRedactionChecks": {},
+      "QueryStringRedacted": true
+    },
+    {
+      "Timestamp": 1794436040902,
+      "Action": "ALLOW",
+      "TerminatingRuleId": "Default_Action",
+      "SensitiveHeaderRedactionChecks": {},
+      "QueryStringRedacted": true
+    },
+    {
+      "Timestamp": 1794436042128,
+      "Action": "ALLOW",
+      "TerminatingRuleId": "Default_Action",
+      "SensitiveHeaderRedactionChecks": {},
+      "QueryStringRedacted": true
+    },
+    {
+      "Timestamp": 1794436043084,
+      "Action": "ALLOW",
+      "TerminatingRuleId": "Default_Action",
+      "SensitiveHeaderRedactionChecks": {},
+      "QueryStringRedacted": true
+    },
+    {
+      "Timestamp": 1794436043573,
+      "Action": "ALLOW",
+      "TerminatingRuleId": "Default_Action",
+      "SensitiveHeaderRedactionChecks": {},
+      "QueryStringRedacted": true
+    },
+    {
+      "Timestamp": 1794436079960,
+      "Action": "ALLOW",
+      "TerminatingRuleId": "Default_Action",
+      "SensitiveHeaderRedactionChecks": {},
+      "QueryStringRedacted": true
+    }
+  ]
+}

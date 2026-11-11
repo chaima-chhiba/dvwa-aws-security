@@ -1,0 +1,20 @@
+[
+    {
+        "State": "OK",
+        "Reason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "Dimensions": [
+            {
+                "Name": "Region",
+                "Value": "us-east-1"
+            },
+            {
+                "Name": "WebACL",
+                "Value": "dvwa-layer1-waf"
+            },
+            {
+                "Name": "Rule",
+                "Value": "ALL"
+            }
+        ]
+    }
+]

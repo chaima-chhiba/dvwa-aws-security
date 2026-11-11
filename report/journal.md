@@ -54,3 +54,9 @@
 - WAF dashboard user screenshot shows Last 3 hours: Total 9, Allowed 9, Blocked 0, CAPTCHA 0, Challenged 0, Monetized 0. Saved evidence/03-waf/12-request-metrics.png. Confirms dashboard request metrics are populated; does not establish request origins, absence of false positives generally, or blocking effectiveness. Sampled request rows are not visible.
 
 - Sampled requests subsequently became visible in user screenshot. Saved evidence/03-waf/13-sampled-allowed-requests.png. Visible rows use dvwa-web-acl metric, show ALLOW for paths including /, /sse, /login.php, /favicon.ico, and /mcp; no rule inside a rule group is listed for those rows. Request origins are not attributed. This supersedes the earlier user-reported empty sampling view; no blocking result has been observed.
+
+## 2026-11-11 - Layer 4 preparation
+- Layer 3 evidence committed/pushed as c56bf5e after explicit approval to include screenshots with source IPs in the private repository.
+- Created layer4 branch. Prepared secret/version/resource policy restricted to existing LabRole, JSON-key ECS secret injection, platform 1.4.0, and shared local state.
+- Removed password default in Layer 4 and marked private password input sensitive. Existing database password must be supplied unchanged; no rotation intended.
+- Local initialization and Terraform validation passed. AWS plan, permissions, replacement deployment, and runtime retrieval remain unverified. ECS service replacement will interrupt availability; secrets/state/runtime environment limitations documented in terraform/layer4/README.md.

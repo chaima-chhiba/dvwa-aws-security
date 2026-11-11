@@ -35,3 +35,22 @@
 - Added regional WAF managed common and SQL injection rule groups, metrics, sampling, and ALB association. Full log delivery remains for Layer 5.
 - Layer 3 explicitly reuses terraform/layer2/terraform.tfstate via a local backend; no state copy. After Layer 3 apply, use Layer 3 for management and teardown. Deployment and filtering results remain unverified.
 - Layer 3 initialization and terraform validate passed with pinned providers; workspace is default. AWS plan and deployment pending.
+
+- User-provided Layer 3 plan confirms only aws_wafv2_web_acl.dvwa and aws_wafv2_web_acl_association.alb will be created: 2 add, 0 change, 0 destroy. Evidence: evidence/03-waf/01-reviewed-plan.png. Apply and filtering validation pending.
+
+- Layer 3 apply succeeded per user screenshot: 2 added, 0 changed, 0 destroyed. Saved evidence/03-waf/02-apply-complete.png. WAF association readback, benign HTTPS availability, and rule evidence remain pending; filtering effectiveness is not yet demonstrated.
+
+- User output confirms get-web-acl-for-resource returns dvwa-layer1-waf for the existing ALB, and benign HTTPS /login.php returns 200. Saved evidence/03-waf/05-association-and-availability.png; command outputs saved as 03-alb-waf-association.json and 04-benign-https-check.txt. Managed rule configuration and measured filtering evidence still pending.
+
+- Saved evidence/03-waf/06-waf-console-overview.png: WAF console lists dvwa-layer1-waf with two rules. Rule names/actions and associated resource detail screenshots remain pending.
+
+- Saved 07-managed-rule-groups.png: AWSManagedRulesCommonRuleSet precedes AWSManagedRulesSQLiRuleSet; console shows 700 and 200 WCU respectively. Numeric priorities and override actions are not visible in this screenshot.
+- Saved 08-console-resource-permission-limits.png: console denies apprunner:ListAssociatedServicesForWebAcl and wafv2:ListResourcesForWebACL. ALB is displayed, but association proof remains the successful earlier get-web-acl-for-resource readback. No IAM changes needed for this evidence workaround.
+
+- WAF API readback verified in user screenshot: default Allow; AWSManagedRulesCommonRuleSet priority 10 and AWSManagedRulesSQLiRuleSet priority 20; each has OverrideAction None and AWS vendor. Saved evidence/03-waf/10-rule-configuration-readback.png; JSON captured as 09-rule-configuration.json. Deployment, association, benign HTTPS availability, and intended rule configuration verified. Metrics and measured blocking effectiveness remain unverified.
+
+- Saved evidence/03-waf/11-dashboard-insights-overview.png. Dashboard shows zeros in traffic-insight recommendation categories and Last 3 hours selected; request metrics and sampled-request rows are below the visible area. These zeros do not demonstrate zero requests or successful blocking. Request metrics and filtering measurement remain pending.
+
+- WAF dashboard user screenshot shows Last 3 hours: Total 9, Allowed 9, Blocked 0, CAPTCHA 0, Challenged 0, Monetized 0. Saved evidence/03-waf/12-request-metrics.png. Confirms dashboard request metrics are populated; does not establish request origins, absence of false positives generally, or blocking effectiveness. Sampled request rows are not visible.
+
+- Sampled requests subsequently became visible in user screenshot. Saved evidence/03-waf/13-sampled-allowed-requests.png. Visible rows use dvwa-web-acl metric, show ALLOW for paths including /, /sse, /login.php, /favicon.ico, and /mcp; no rule inside a rule group is listed for those rows. Request origins are not attributed. This supersedes the earlier user-reported empty sampling view; no blocking result has been observed.

@@ -1,0 +1,4 @@
+{
+    "Name": "dvwa-layer1-waf",
+    "ARN": "arn:aws:wafv2:us-east-1:018206537112:regional/webacl/dvwa-layer1-waf/c4ec632f-fc00-4d7a-8d3e-1f505c2e25b2"
+}

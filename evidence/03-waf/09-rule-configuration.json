@@ -1,0 +1,29 @@
+{
+    "DefaultAction": {
+        "Allow": {}
+    },
+    "Rules": [
+        {
+            "Name": "AWSManagedRulesCommonRuleSet",
+            "Priority": 10,
+            "OverrideAction": {
+                "None": {}
+            },
+            "ManagedGroup": {
+                "VendorName": "AWS",
+                "Name": "AWSManagedRulesCommonRuleSet"
+            }
+        },
+        {
+            "Name": "AWSManagedRulesSQLiRuleSet",
+            "Priority": 20,
+            "OverrideAction": {
+                "None": {}
+            },
+            "ManagedGroup": {
+                "VendorName": "AWS",
+                "Name": "AWSManagedRulesSQLiRuleSet"
+            }
+        }
+    ]
+}
